@@ -173,6 +173,86 @@ export default function ClientPage() {
           </div>
         </section>
 
+        <section className="max-w-4xl mx-auto bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 mb-16">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+            La Mejor Herramienta para Comprimir Imágenes Online
+          </h2>
+          <div className="prose max-w-none text-gray-700 space-y-4">
+            <p>
+              Nuestro <strong>compresor de imágenes online</strong> te permite <strong>reducir el tamaño de tus fotos</strong> hasta 
+              un 90% manteniendo la calidad visual. A diferencia de otras herramientas, todo el procesamiento ocurre en tu navegador, 
+              lo que significa que <strong>tus imágenes nunca se suben a ningún servidor</strong>.
+            </p>
+            
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+              ¿Por qué elegir nuestro compresor?
+            </h3>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>
+                <strong>Privacidad total:</strong> A diferencia de TinyPNG, CompressJPEG u otras herramientas, 
+                tus archivos nunca salen de tu computadora. Perfecto si trabajas con imágenes confidenciales.
+              </li>
+              <li>
+                <strong>Sin límites:</strong> Comprime infinitas imágenes sin restricciones. No pedimos registro 
+                ni email como otras plataformas.
+              </li>
+              <li>
+                <strong>Más rápido:</strong> Al procesar localmente, eliminas el tiempo de subida y descarga. 
+                La compresión es instantánea.
+              </li>
+              <li>
+                <strong>Múltiples formatos:</strong> Soporta JPG, PNG y WebP. Procesa múltiples imágenes 
+                simultáneamente y descárgalas en ZIP.
+              </li>
+            </ul>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+              Casos de uso comunes
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-white rounded-lg p-4 border border-gray-200">
+                <strong className="text-purple-600">Para sitios web:</strong>
+                <p className="text-sm text-gray-600 mt-1">
+                  Optimiza imágenes de productos, banners y galerías para mejorar la velocidad de carga y SEO.
+                </p>
+              </div>
+              <div className="bg-white rounded-lg p-4 border border-gray-200">
+                <strong className="text-blue-600">Para redes sociales:</strong>
+                <p className="text-sm text-gray-600 mt-1">
+                  Reduce el peso de fotos para Instagram, Facebook, Twitter sin sacrificar calidad visual.
+                </p>
+              </div>
+              <div className="bg-white rounded-lg p-4 border border-gray-200">
+                <strong className="text-green-600">Para email:</strong>
+                <p className="text-sm text-gray-600 mt-1">
+                  Envía más fotos por email sin exceder los límites de archivo adjunto (25MB típicamente).
+                </p>
+              </div>
+              <div className="bg-white rounded-lg p-4 border border-gray-200">
+                <strong className="text-orange-600">Para almacenamiento:</strong>
+                <p className="text-sm text-gray-600 mt-1">
+                  Libera espacio en tu disco duro, Google Drive, Dropbox o cualquier servicio en la nube.
+                </p>
+              </div>
+            </div>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+              Comparación con otras herramientas
+            </h3>
+            <p>
+              Nuestro compresor se diferencia de <strong>TinyPNG</strong>, <strong>CompressJPEG</strong>, 
+              <strong>ILoveIMG</strong> y <strong>Compressnow</strong> en varios aspectos clave:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 mt-3">
+              <li><strong>100% privado</strong> - Otros suben tus imágenes a sus servidores</li>
+              <li><strong>Sin límites diarios</strong> - TinyPNG limita a 20 imágenes/mes en plan gratuito</li>
+              <li><strong>Más rápido</strong> - Sin tiempo de upload/download</li>
+              <li><strong>Sin registro</strong> - Muchos competidores requieren crear cuenta</li>
+              <li><strong>Funciona offline</strong> - Una vez cargada la página, no necesitas internet</li>
+            </ul>
+          </div>
+        </section>
+
         <section className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
             Preguntas Frecuentes
