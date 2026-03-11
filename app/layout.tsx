@@ -16,10 +16,15 @@ export const metadata: Metadata = {
   title: "Comprimir Imágenes Gratis | Reducir Tamaño de Fotos Online",
   description: "Comprime imágenes JPG, PNG y WebP gratis. Reduce el tamaño de tus fotos hasta 90% sin perder calidad. Rápido, seguro y sin límites. 100% en tu navegador.",
   keywords: "comprimir imagenes, reducir tamaño foto, comprimir jpg, comprimir png, optimizar imagenes, compresor fotos gratis",
+  icons: {
+    icon: '/icon.svg',
+    apple: '/icon.svg',
+  },
   openGraph: {
     title: "Comprimir Imágenes Gratis | Compresor de Fotos Online",
     description: "Reduce el tamaño de tus imágenes hasta 90% sin perder calidad visible. Gratis y sin límites.",
     type: "website",
+    images: ['/icon.svg'],
   },
   robots: {
     index: true,
