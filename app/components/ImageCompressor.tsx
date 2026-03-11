@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 import imageCompression from 'browser-image-compression';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { useSecurityMonitor } from '../hooks/useSecurityMonitor';
 
 interface CompressedImage {
   id: string;
@@ -31,6 +32,7 @@ export default function ImageCompressor() {
   const [qualityLevel, setQualityLevel] = useState<QualityLevel>('medium');
   const [dragActive, setDragActive] = useState(false);
   const [isCompressingAll, setIsCompressingAll] = useState(false);
+  const { logEvent } = useSecurityMonitor();
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -59,17 +61,67 @@ export default function ImageCompressor() {
   };
 
   const handleFiles = (files: File[]) => {
-    const imageFiles = files.filter(file => 
-      file.type.startsWith('image/') && 
-      ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file.type)
-    );
-
-    if (imageFiles.length === 0) {
-      alert('Por favor, sube archivos de imagen válidos (JPG, PNG, WebP)');
+    // Log de seguridad
+    if (!logEvent('upload')) {
+      alert('Demasiadas operaciones. Por favor, espera un momento antes de continuar.');
       return;
     }
 
-    const newImages: CompressedImage[] = imageFiles.map(file => ({
+    // Validaciones de seguridad
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+    const MAX_FILES = 50; // Máximo 50 imágenes a la vez
+    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    
+    // Validar número de archivos
+    if (files.length + images.length > MAX_FILES) {
+      alert(`Máximo ${MAX_FILES} imágenes permitidas a la vez. Actualmente tienes ${images.length}.`);
+      return;
+    }
+
+    // Filtrar y validar cada archivo
+    const validatedFiles: File[] = [];
+    const errors: string[] = [];
+
+    files.forEach(file => {
+      // Validar tipo de archivo
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        errors.push(`${file.name}: Tipo de archivo no válido. Solo JPG, PNG y WebP.`);
+        return;
+      }
+
+      // Validar nombre de archivo (evitar nombres sospechosos)
+      if (file.name.includes('..') || file.name.includes('/') || file.name.includes('\\')) {
+        errors.push(`${file.name}: Nombre de archivo no válido.`);
+        return;
+      }
+
+      // Validar tamaño
+      if (file.size > MAX_FILE_SIZE) {
+        errors.push(`${file.name}: Archivo muy grande. Máximo 10MB por imagen.`);
+        return;
+      }
+
+      // Validar que no esté vacío
+      if (file.size === 0) {
+        errors.push(`${file.name}: Archivo vacío.`);
+        return;
+      }
+
+      validatedFiles.push(file);
+    });
+
+    // Mostrar errores si hay
+    if (errors.length > 0) {
+      alert('Algunos archivos fueron rechazados:\n\n' + errors.slice(0, 5).join('\n'));
+    }
+
+    // Si no hay archivos válidos, salir
+    if (validatedFiles.length === 0) {
+      alert('No se encontraron imágenes válidas para procesar.');
+      return;
+    }
+
+    const newImages: CompressedImage[] = validatedFiles.map(file => ({
       id: `${file.name}-${Date.now()}-${Math.random()}`,
       originalFile: file,
       originalSize: file.size,
@@ -86,6 +138,12 @@ export default function ImageCompressor() {
   };
 
   const compressImage = async (imageId: string) => {
+    // Log de seguridad
+    if (!logEvent('compression')) {
+      alert('Demasiadas operaciones. Por favor, espera un momento.');
+      return;
+    }
+
     setImages(prev => prev.map(img => 
       img.id === imageId ? { ...img, isCompressing: true, error: null } : img
     ));
@@ -94,12 +152,28 @@ export default function ImageCompressor() {
       const image = images.find(img => img.id === imageId);
       if (!image) return;
 
-      const options = qualitySettings[qualityLevel];
-      
-      const compressedFile = await imageCompression(image.originalFile, {
-        ...options,
+      // Timeout de seguridad (30 segundos máximo por imagen)
+      const compressionPromise = imageCompression(image.originalFile, {
+        ...qualitySettings[qualityLevel],
         useWebWorker: true,
+        maxIteration: 10,
+        exifOrientation: true,
+        preserveExif: false, // Eliminar metadata por seguridad
       });
+
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout: La compresión tardó demasiado')), 30000)
+      );
+
+      const compressedFile = await Promise.race([
+        compressionPromise,
+        timeoutPromise
+      ]) as File;
+
+      // Validar que el archivo comprimido es válido
+      if (!compressedFile || compressedFile.size === 0) {
+        throw new Error('El archivo comprimido está vacío');
+      }
 
       const compressedPreview = URL.createObjectURL(compressedFile);
       const compressionRatio = ((image.originalSize - compressedFile.size) / image.originalSize) * 100;
@@ -111,19 +185,28 @@ export default function ImageCompressor() {
               compressedFile,
               compressedSize: compressedFile.size,
               compressedPreview,
-              compressionRatio,
+              compressionRatio: compressionRatio > 0 ? compressionRatio : 0,
               isCompressing: false,
             }
           : img
       ));
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error compressing image:', error);
+      
+      let errorMessage = 'Error al comprimir la imagen';
+      
+      if (error.message?.includes('Timeout')) {
+        errorMessage = 'La imagen es muy grande o compleja. Intenta con una más pequeña.';
+      } else if (error.message?.includes('memory')) {
+        errorMessage = 'Memoria insuficiente. Cierra otras pestañas e intenta de nuevo.';
+      }
+      
       setImages(prev => prev.map(img =>
         img.id === imageId
           ? {
               ...img,
               isCompressing: false,
-              error: 'Error al comprimir la imagen',
+              error: errorMessage,
             }
           : img
       ));
@@ -145,6 +228,12 @@ export default function ImageCompressor() {
   const downloadImage = (image: CompressedImage) => {
     if (!image.compressedFile) return;
     
+    // Log de seguridad
+    if (!logEvent('download')) {
+      alert('Demasiadas descargas. Por favor, espera un momento.');
+      return;
+    }
+    
     const link = document.createElement('a');
     link.href = URL.createObjectURL(image.compressedFile);
     link.download = `compressed-${image.originalFile.name}`;
@@ -157,6 +246,12 @@ export default function ImageCompressor() {
     
     if (compressedImages.length === 0) {
       alert('No hay imágenes comprimidas para descargar');
+      return;
+    }
+
+    // Log de seguridad
+    if (!logEvent('download')) {
+      alert('Demasiadas operaciones. Por favor, espera un momento.');
       return;
     }
 

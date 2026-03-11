@@ -29,6 +29,20 @@ Compresor de imágenes profesional y gratuito. Reduce el tamaño de tus fotos ha
 - **JSZip** - Generación de archivos ZIP
 - **file-saver** - Descarga de archivos
 
+## 🛡️ Seguridad
+
+Esta aplicación implementa **7 capas de protección** contra ataques:
+
+- ✅ **Headers de Seguridad HTTP** - CSP, XSS Protection, Frame Options
+- ✅ **Rate Limiting** - 100 requests/minuto por IP
+- ✅ **Validación de Archivos** - Límite 10MB, solo imágenes
+- ✅ **Monitor Anti-Spam** - Detecta y bloquea comportamiento abusivo
+- ✅ **Bot Detection** - Bloquea herramientas de automatización
+- ✅ **Timeout Protection** - 30 segundos máximo por operación
+- ✅ **Eliminación de Metadata** - Protege privacidad del usuario
+
+**Más información:** Ver [SEGURIDAD.md](./SEGURIDAD.md)
+
 ## 📦 Instalación Local
 
 ```bash

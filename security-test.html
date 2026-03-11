@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Seguridad - Compresor de Imágenes</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #6366f1; }
+        h2 { color: #4f46e5; margin-top: 0; }
+        button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #4f46e5; }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success { background: #d1fae5; color: #065f46; }
+        .error { background: #fee2e2; color: #991b1b; }
+        .warning { background: #fef3c7; color: #92400e; }
+    </style>
+</head>
+<body>
+    <h1>🛡️ Test de Seguridad Local</h1>
+    <p>Prueba las validaciones de seguridad antes de hacer deploy.</p>
+
+    <!-- TEST 1: Validación de tipos de archivo -->
+    <div class="test-section">
+        <h2>1. Test: Tipos de Archivo</h2>
+        <p>Prueba subir diferentes tipos de archivos:</p>
+        <input type="file" id="fileInput" accept="image/*" multiple />
+        <button onclick="testFileValidation()">Probar Validación</button>
+        <div id="fileResult" class="result"></div>
+    </div>
+
+    <!-- TEST 2: Límite de tamaño -->
+    <div class="test-section">
+        <h2>2. Test: Límite de Tamaño</h2>
+        <p>Simula archivo de 15MB (debe rechazarse):</p>
+        <button onclick="testSizeLimit()">Probar Límite</button>
+        <div id="sizeResult" class="result"></div>
+    </div>
+
+    <!-- TEST 3: Validación de nombres -->
+    <div class="test-section">
+        <h2>3. Test: Nombres Sospechosos</h2>
+        <p>Prueba nombres con caracteres peligrosos:</p>
+        <button onclick="testDangerousNames()">Probar Nombres</button>
+        <div id="nameResult" class="result"></div>
+    </div>
+
+    <!-- TEST 4: Rate limiting simulado -->
+    <div class="test-section">
+        <h2>4. Test: Rate Limiting</h2>
+        <p>Simula 60 operaciones rápidas:</p>
+        <button onclick="testRateLimit()">Probar Rate Limit</button>
+        <div id="rateResult" class="result"></div>
+    </div>
+
+    <!-- TEST 5: Headers de seguridad -->
+    <div class="test-section">
+        <h2>5. Test: Headers de Seguridad</h2>
+        <p>Verifica headers después del deploy:</p>
+        <input type="text" id="urlInput" value="https://compresor-imagenes.com" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+        <button onclick="checkSecurityHeaders()">Verificar Headers</button>
+        <div id="headerResult" class="result"></div>
+    </div>
+
+    <script>
+        // TEST 1: Validación de tipos
+        function testFileValidation() {
+            const input = document.getElementById('fileInput');
+            const result = document.getElementById('fileResult');
+            
+            if (!input.files || input.files.length === 0) {
+                result.className = 'result warning';
+                result.textContent = '⚠️ Por favor, selecciona al menos un archivo.';
+                return;
+            }
+
+            const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            const files = Array.from(input.files);
+            
+            let testResults = [];
+            files.forEach(file => {
+                const isValid = ALLOWED_TYPES.includes(file.type);
+                testResults.push(`${file.name} (${file.type}): ${isValid ? '✅ VÁLIDO' : '❌ RECHAZADO'}`);
+            });
+
+            result.className = 'result success';
+            result.textContent = testResults.join('\n');
+        }
+
+        // TEST 2: Límite de tamaño
+        function testSizeLimit() {
+            const result = document.getElementById('sizeResult');
+            const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+            const testSize = 15 * 1024 * 1024; // 15MB
+
+            if (testSize > MAX_SIZE) {
+                result.className = 'result success';
+                result.textContent = `✅ CORRECTO: Archivo de ${(testSize/1024/1024).toFixed(1)}MB sería rechazado (límite: 10MB)`;
+            } else {
+                result.className = 'result error';
+                result.textContent = '❌ ERROR: Límite no está funcionando';
+            }
+        }
+
+        // TEST 3: Nombres peligrosos
+        function testDangerousNames() {
+            const result = document.getElementById('nameResult');
+            const dangerousNames = [
+                '../../../etc/passwd.jpg',
+                'test/../hack.png',
+                'image\\..\\malware.png',
+                'normal-image.jpg'
+            ];
+
+            let testResults = [];
+            dangerousNames.forEach(name => {
+                const isDangerous = name.includes('..') || name.includes('/') || name.includes('\\');
+                const status = name === 'normal-image.jpg' ? 
+                    (isDangerous ? '❌ FALLÓ' : '✅ VÁLIDO') :
+                    (isDangerous ? '✅ BLOQUEADO' : '❌ FALLÓ');
+                testResults.push(`${name}: ${status}`);
+            });
+
+            result.className = 'result success';
+            result.textContent = testResults.join('\n');
+        }
+
+        // TEST 4: Rate limiting
+        function testRateLimit() {
+            const result = document.getElementById('rateResult');
+            const events = [];
+            const MAX_EVENTS = 50;
+            const WINDOW = 60000;
+
+            result.className = 'result';
+            result.textContent = '⏳ Simulando 60 operaciones...';
+
+            // Simular eventos rápidos
+            for (let i = 0; i < 60; i++) {
+                events.push({ timestamp: Date.now(), count: i + 1 });
+            }
+
+            // Verificar
+            const now = Date.now();
+            const recentEvents = events.filter(e => now - e.timestamp < WINDOW);
+
+            if (recentEvents.length > MAX_EVENTS) {
+                result.className = 'result success';
+                result.textContent = `✅ CORRECTO: ${recentEvents.length} eventos detectados. Rate limit se activaría (límite: ${MAX_EVENTS}/min)`;
+            } else {
+                result.className = 'result warning';
+                result.textContent = `⚠️ ${recentEvents.length} eventos. Rate limit no se activaría aún.`;
+            }
+        }
+
+        // TEST 5: Headers de seguridad (requiere que la app esté desplegada)
+        async function checkSecurityHeaders() {
+            const url = document.getElementById('urlInput').value;
+            const result = document.getElementById('headerResult');
+            
+            result.className = 'result';
+            result.textContent = '⏳ Verificando headers...';
+
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                
+                const securityHeaders = [
+                    'strict-transport-security',
+                    'x-frame-options',
+                    'x-content-type-options',
+                    'x-xss-protection',
+                    'content-security-policy',
+                    'referrer-policy'
+                ];
+
+                let headerResults = ['Headers de Seguridad:\n'];
+                let score = 0;
+
+                securityHeaders.forEach(header => {
+                    const value = response.headers.get(header);
+                    if (value) {
+                        headerResults.push(`✅ ${header}: ${value.substring(0, 50)}...`);
+                        score++;
+                    } else {
+                        headerResults.push(`❌ ${header}: NO ENCONTRADO`);
+                    }
+                });
+
+                const grade = score === 6 ? 'A+' : score >= 5 ? 'A' : score >= 4 ? 'B' : 'C';
+                
+                result.className = score >= 5 ? 'result success' : 'result warning';
+                result.textContent = `Grade: ${grade} (${score}/6 headers)\n\n` + headerResults.join('\n');
+
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = `❌ Error: ${error.message}\n\n⚠️ Nota: Este test solo funciona después del deploy. Verifica manualmente en:\nhttps://securityheaders.com/?q=${url}`;
+            }
+        }
+    </script>
+
+    <div style="margin-top: 40px; padding: 20px; background: #eff6ff; border-radius: 8px; border-left: 4px solid #3b82f6;">
+        <h3 style="margin-top: 0;">📖 Cómo usar estas pruebas:</h3>
+        <ol>
+            <li><strong>Antes del deploy:</strong> Prueba Tests 1-4 localmente</li>
+            <li><strong>Después del deploy:</strong> Prueba Test 5 con tu URL real</li>
+            <li><strong>Verifica también:</strong> 
+                <ul>
+                    <li><a href="https://securityheaders.com" target="_blank">SecurityHeaders.com</a></li>
+                    <li><a href="https://observatory.mozilla.org" target="_blank">Mozilla Observatory</a></li>
+                    <li><a href="https://www.ssllabs.com/ssltest/" target="_blank">SSL Labs</a></li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+</body>
+</html>
