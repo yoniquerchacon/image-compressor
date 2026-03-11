@@ -157,7 +157,6 @@ export default function ImageCompressor() {
         ...qualitySettings[qualityLevel],
         useWebWorker: true,
         maxIteration: 10,
-        exifOrientation: true,
         preserveExif: false, // Eliminar metadata por seguridad
       });
 
