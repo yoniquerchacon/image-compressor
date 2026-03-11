@@ -1,4 +1,0 @@
-Name:  @
-Type:  TXT
-Value: google-site-verification=vZjt9xYtNLmt4ivvSXWSVmKCUdHM55uIy
-TTL:   60
