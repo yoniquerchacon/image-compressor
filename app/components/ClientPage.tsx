@@ -246,7 +246,20 @@ export default function ClientPage() {
         </section>
 
         <footer className="mt-20 text-center text-gray-600 border-t pt-8">
-          <p>© 2026 Compresor de Imágenes. Herramienta gratuita para reducir el tamaño de fotos online.</p>
+          <div className="flex flex-wrap justify-center gap-6 mb-4">
+            <a href="/privacy" className="hover:text-blue-600 transition-colors">
+              Política de Privacidad
+            </a>
+            <a href="/terms" className="hover:text-blue-600 transition-colors">
+              Términos de Uso
+            </a>
+          </div>
+          <p className="text-sm">
+            © 2026 Compresor de Imágenes. Herramienta gratuita para reducir el tamaño de fotos online.
+          </p>
+          <p className="text-xs mt-2 text-gray-500">
+            Procesamiento 100% en tu navegador. Tus imágenes nunca se suben a ningún servidor.
+          </p>
         </footer>
       </div>
     </div>
