@@ -20,15 +20,37 @@ export const metadata: Metadata = {
     icon: '/icon.svg',
     apple: '/icon.svg',
   },
+  metadataBase: new URL('https://compresor-imagenes.com'),
   openGraph: {
     title: "Comprimir Imágenes Gratis | Compresor de Fotos Online",
     description: "Reduce el tamaño de tus imágenes hasta 90% sin perder calidad visible. Gratis y sin límites.",
+    url: 'https://compresor-imagenes.com',
+    siteName: 'Compresor de Imágenes',
     type: "website",
+    images: [
+      {
+        url: '/icon.svg',
+        width: 512,
+        height: 512,
+        alt: 'Compresor de Imágenes Logo',
+      }
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Comprimir Imágenes Gratis | Compresor de Fotos Online",
+    description: "Reduce el tamaño de tus imágenes hasta 90% sin perder calidad visible. Gratis y sin límites.",
     images: ['/icon.svg'],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
