@@ -28,7 +28,11 @@ export const metadata: Metadata = {
     google: 'vZjt9xYtNLmt4ivvSXWSVmKCUdHM55uIy',
   },
   icons: {
-    icon: '/icon.svg',
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+    ],
+    shortcut: '/favicon.ico',
     apple: '/icon.svg',
   },
   metadataBase: new URL('https://compresor-imagenes.com'),
@@ -73,6 +77,10 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
+        <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icon.svg" />
+        <link rel="apple-touch-icon" href="/icon.svg" />
+        <link rel="shortcut icon" href="/icon.svg" />
         <SoftwareApplicationSchema />
         <FAQPageSchema />
         <HowToSchema />
