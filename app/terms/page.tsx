@@ -1,3 +1,17 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Términos de Uso | Compresor de Imágenes',
+  description: 'Términos y condiciones de uso del compresor de imágenes online gratuito. Herramienta segura para comprimir JPG, PNG y WebP.',
+  alternates: {
+    canonical: '/terms',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">

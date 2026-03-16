@@ -1,3 +1,17 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Política de Privacidad | Compresor de Imágenes',
+  description: 'Política de privacidad del compresor de imágenes. Tus imágenes se procesan 100% en tu navegador, nunca se suben a servidores.',
+  alternates: {
+    canonical: '/privacy',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">

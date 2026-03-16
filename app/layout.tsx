@@ -35,11 +35,14 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico',
     apple: '/icon.svg',
   },
-  metadataBase: new URL('https://compresor-imagenes.com'),
+  metadataBase: new URL('https://compressor-imagenes.com'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: "Comprimir Imágenes Gratis | Compresor de Fotos Online",
     description: "Reduce el tamaño de tus imágenes hasta 90% sin perder calidad visible. Gratis y sin límites.",
-    url: 'https://compresor-imagenes.com',
+    url: 'https://compressor-imagenes.com',
     siteName: 'Compresor de Imágenes',
     type: "website",
     images: [

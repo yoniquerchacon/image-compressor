@@ -90,7 +90,7 @@ export function middleware(request: NextRequest) {
     try {
       const refererUrl = new URL(referer);
       if (!refererUrl.hostname.includes(host) && 
-          !refererUrl.hostname.includes('compresor-imagenes.com') &&
+          !refererUrl.hostname.includes('compressor-imagenes.com') &&
           !refererUrl.hostname.includes('localhost')) {
         // Solo loguear pero no bloquear (para no afectar usuarios legítimos)
         console.log(`Suspicious referer: ${referer}`);

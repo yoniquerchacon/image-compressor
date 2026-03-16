@@ -8,7 +8,7 @@ export function SoftwareApplicationSchema() {
     "alternateName": "Image Compressor",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Web Browser",
-    "url": "https://compresor-imagenes.com",
+    "url": "https://compressor-imagenes.com",
     "description": "Comprime imágenes JPG, PNG y WebP gratis hasta 90% sin perder calidad. 100% en tu navegador, sin subir archivos.",
     "offers": {
       "@type": "Offer",
@@ -24,7 +24,7 @@ export function SoftwareApplicationSchema() {
       "3 niveles de calidad",
       "Preview antes/después"
     ],
-    "screenshot": "https://compresor-imagenes.com/icon.svg",
+    "screenshot": "https://compressor-imagenes.com/icon.svg",
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
@@ -116,7 +116,7 @@ export function HowToSchema() {
     "@type": "HowTo",
     "name": "Cómo comprimir imágenes online",
     "description": "Guía paso a paso para comprimir imágenes JPG, PNG y WebP sin perder calidad",
-    "image": "https://compresor-imagenes.com/icon.svg",
+    "image": "https://compressor-imagenes.com/icon.svg",
     "totalTime": "PT2M",
     "estimatedCost": {
       "@type": "MonetaryAmount",
@@ -132,25 +132,25 @@ export function HowToSchema() {
         "@type": "HowToStep",
         "name": "Sube tus imágenes",
         "text": "Arrastra y suelta tus imágenes JPG, PNG o WebP en el área indicada, o haz click para seleccionarlas desde tu dispositivo. Puedes subir múltiples imágenes a la vez.",
-        "url": "https://compresor-imagenes.com#step1"
+        "url": "https://compressor-imagenes.com#step1"
       },
       {
         "@type": "HowToStep",
         "name": "Selecciona la calidad",
         "text": "Elige entre 3 niveles de compresión: Máxima (más pequeño), Media (balance), o Mínima (mejor calidad). La mayoría de usuarios prefiere 'Media'.",
-        "url": "https://compresor-imagenes.com#step2"
+        "url": "https://compressor-imagenes.com#step2"
       },
       {
         "@type": "HowToStep",
         "name": "Comprime",
         "text": "Haz click en 'Comprimir Todas' para procesar todas las imágenes simultáneamente. El procesamiento es instantáneo y ocurre en tu navegador.",
-        "url": "https://compresor-imagenes.com#step3"
+        "url": "https://compressor-imagenes.com#step3"
       },
       {
         "@type": "HowToStep",
         "name": "Descarga",
         "text": "Descarga cada imagen individualmente o todas juntas en un archivo ZIP. Compara el antes/después con el preview incluido.",
-        "url": "https://compresor-imagenes.com#step4"
+        "url": "https://compressor-imagenes.com#step4"
       }
     ]
   };
@@ -172,13 +172,13 @@ export function BreadcrumbSchema({ path }: { path: string }) {
         "@type": "ListItem",
         "position": 1,
         "name": "Inicio",
-        "item": "https://compresor-imagenes.com"
+        "item": "https://compressor-imagenes.com"
       },
       ...(path !== '/' ? [{
         "@type": "ListItem",
         "position": 2,
         "name": path.split('/').filter(Boolean).join(' > '),
-        "item": `https://compresor-imagenes.com${path}`
+        "item": `https://compressor-imagenes.com${path}`
       }] : [])
     ]
   };
@@ -196,8 +196,8 @@ export function OrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Compresor de Imágenes",
-    "url": "https://compresor-imagenes.com",
-    "logo": "https://compresor-imagenes.com/icon.svg",
+    "url": "https://compressor-imagenes.com",
+    "logo": "https://compressor-imagenes.com/icon.svg",
     "description": "Herramienta gratuita para comprimir imágenes JPG, PNG y WebP sin límites",
     "sameAs": [
       "https://github.com/yoniquerchacon/image-compressor"
@@ -217,13 +217,13 @@ export function WebSiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Compresor de Imágenes",
-    "url": "https://compresor-imagenes.com",
+    "url": "https://compressor-imagenes.com",
     "description": "Comprime imágenes gratis hasta 90% sin perder calidad",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": "https://compresor-imagenes.com/?q={search_term_string}"
+        "urlTemplate": "https://compressor-imagenes.com/?q={search_term_string}"
       },
       "query-input": "required name=search_term_string"
     }

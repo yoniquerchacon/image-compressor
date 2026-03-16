@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://compresor-imagenes.com/sitemap.xml
+Sitemap: https://compressor-imagenes.com/sitemap.xml
